@@ -1,0 +1,38 @@
+{
+  "source": "Table 2, gsbr-paper.pdf, page 9",
+  "benchmark": "Cube Triple",
+  "metric": "Normalized throughput",
+  "uncertainty": "SEM across three seeds",
+  "sample_count": {
+    "N": [
+      8,
+      16,
+      32
+    ],
+    "mean": [
+      1.0,
+      0.91,
+      0.93
+    ],
+    "sem": [
+      0.05,
+      0.02,
+      0.02
+    ]
+  },
+  "radius": {
+    "labels": [
+      "Adaptive radius",
+      "r = 0"
+    ],
+    "mean": [
+      1.0,
+      0.66
+    ],
+    "sem": [
+      0.05,
+      0.07
+    ],
+    "adaptive_reference": "The adaptive-radius bar is the N=8 row in Table 2."
+  }
+}

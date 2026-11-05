@@ -1,0 +1,5 @@
+host: 127.0.0.1
+port: 8400
+policy_name: pi05_libero
+env_name: libero
+checkpoint_path: null

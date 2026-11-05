@@ -1,0 +1,49 @@
+{
+  "source": "Appendix Figure 6, gsbr-paper.pdf, page 18",
+  "curves": [
+    {
+      "benchmark": "RoboMimic",
+      "title": "Tool-hang",
+      "viewBox": [
+        358,
+        97,
+        71,
+        50
+      ],
+      "x_axis": "Online environment steps (millions)"
+    },
+    {
+      "benchmark": "OGBench",
+      "title": "Cube Triple T5",
+      "viewBox": [
+        434,
+        169,
+        71,
+        50
+      ],
+      "x_axis": "Online environment steps (millions)"
+    },
+    {
+      "benchmark": "OCBench",
+      "title": "Chamber T1",
+      "viewBox": [
+        281,
+        241,
+        71,
+        50
+      ],
+      "x_axis": "Online environment steps (millions)"
+    },
+    {
+      "benchmark": "LIBERO",
+      "title": "Task 54",
+      "viewBox": [
+        282,
+        313,
+        73,
+        50
+      ],
+      "x_axis": "Training episodes"
+    }
+  ]
+}

@@ -1,0 +1,110 @@
+env:
+  env:
+    seed: ${seed}
+    task_id: 64
+    _target_: src.envs.liberoenv.LiberoEnv
+    max_steps: 400
+    benchmark_id: libero_90
+    reward_scale: 1
+    done_at_timeout: false
+    image_resolution:
+    - 256
+    - 256
+    use_negative_rewards: true
+  fps: 20
+  task_id: 64
+  _target_: src.envs.liberoenv.LiberoMultiStepEnv
+  auto_reset: false
+  chunk_size: 10
+  benchmark_id: libero_90
+  obs_wrangler:
+    _target_: src.envs.obswranglers.liberoenv.LiberoObsWrangler
+eval:
+  eval_every: 100
+  eval_num_trajs: 50
+  eval_num_videos: 1
+inner_policy:
+  host_ip: 127.0.0.1
+  _target_: src.vla.pi_client.PIClient
+  host_port: 8100
+  policy_name: pi05_libero
+outer_policy:
+  seed: ${seed}
+  cameras:
+  - agentview_image
+  _target_: src.outer_policies.rlt.RLTPolicy
+  inner_policy: ${inner_policy}
+  obs_wrangler: ${env.obs_wrangler}
+  use_state_info: true
+  image_resolution:
+  - 64
+  - 64
+  replay_buffer_size: 45000
+  integration_num_steps: 10
+  cache_num_base_samples: 16
+  integration_start_step: 0
+  learner:
+    lr: 0.0003
+    rho: 0.5
+    tau: 0.005
+    num_qs: 10
+    discount: 0.975
+    batch_size: 256
+    chunk_size: 1
+    cnn_padding: VALID
+    cnn_strides:
+    - 2
+    - 2
+    - 2
+    - 2
+    use_encoder: true
+    cnn_features:
+    - 32
+    - 32
+    - 32
+    - 32
+    bc_loss_weight: 100
+    bottleneck_dim: 50
+    use_bottleneck: true
+    action_chunking: false
+    actor_layer_norm: true
+    actor_hidden_dims:
+    - 512
+    - 512
+    - 512
+    - 512
+    critic_target_max: null
+    critic_target_min: null
+    value_hidden_dims:
+    - 512
+    - 512
+    - 512
+    - 512
+    base_action_dropout: 0.5
+    critic_target_aggregation: mean_std
+train:
+  save_every: 10
+  max_num_trajs: 1000
+  learning_starts: 25
+  grad_steps_per_env_step: 20
+defaults:
+- _self_
+- override hydra/job_logging: disabled
+- override hydra/hydra_logging: disabled
+hydra:
+  output_subdir: null
+  run:
+    dir: .
+seed: 0
+do_restore: true
+results_dir: results
+exp_name: rlt_t64_s${seed}
+wandb:
+  project: gsbr-libero
+  entity: null
+  group: rlt
+  mode: disabled
+  save_code: false
+  tags:
+  - rlt
+  - pi05

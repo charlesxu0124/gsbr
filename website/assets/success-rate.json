@@ -1,0 +1,142 @@
+{
+  "source": "Table 1, gsbr-paper.pdf, page 8",
+  "metric": "Success rate (%)",
+  "columns": [
+    "RoboMimic",
+    "OGBench",
+    "OCBench",
+    "LIBERO",
+    "All tasks"
+  ],
+  "task_counts": [
+    4,
+    5,
+    5,
+    5,
+    19
+  ],
+  "means": {
+    "TD3+BC": [
+      96,
+      73,
+      98,
+      54,
+      79
+    ],
+    "RLT": [
+      96,
+      90,
+      98,
+      86,
+      92
+    ],
+    "Residual Policy": [
+      94,
+      68,
+      95,
+      78,
+      83
+    ],
+    "BFN": [
+      86,
+      69,
+      88,
+      66,
+      77
+    ],
+    "DSRL": [
+      97,
+      67,
+      87,
+      81,
+      82
+    ],
+    "EXPO": [
+      97,
+      80,
+      98,
+      82,
+      89
+    ],
+    "DiceRL": [
+      95,
+      40,
+      97,
+      74,
+      75
+    ],
+    "GSBR": [
+      98,
+      99,
+      99,
+      85,
+      95
+    ]
+  },
+  "sem": {
+    "TD3+BC": [
+      2,
+      1,
+      0,
+      2,
+      1
+    ],
+    "RLT": [
+      2,
+      5,
+      0,
+      2,
+      1
+    ],
+    "Residual Policy": [
+      2,
+      10,
+      0,
+      1,
+      2
+    ],
+    "BFN": [
+      2,
+      5,
+      2,
+      1,
+      1
+    ],
+    "DSRL": [
+      1,
+      5,
+      2,
+      2,
+      2
+    ],
+    "EXPO": [
+      1,
+      1,
+      1,
+      2,
+      1
+    ],
+    "DiceRL": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "GSBR": [
+      0,
+      1,
+      0,
+      1,
+      0
+    ]
+  },
+  "base_policy": [
+    44,
+    0,
+    41,
+    49,
+    33
+  ],
+  "uncertainty": "SEM across three seed-wise task averages. Means and SEM are rounded to the nearest percentage point, as reported in Table 1. Base-policy SEM is not reported."
+}

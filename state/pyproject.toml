@@ -1,0 +1,30 @@
+[project]
+name = "gsbr-state"
+version = "0.1.0"
+requires-python = ">=3.11,<3.13"
+dependencies = [
+  "absl-py==2.3.1", "numpy==1.26.4", "jax==0.4.38", "flax==0.10.0",
+  "optax==0.2.4", "distrax==0.1.5", "ml-collections==1.1.0",
+  "tensorflow-probability==0.25.0", "mujoco==3.3.6", "gymnasium==0.29.1", "ogbench==1.1.5", "ocbench==1.0.2",
+  "h5py==3.14.0", "wandb==0.22.2", "imageio==2.37.2", "imageio-ffmpeg==0.6.0",
+  "matplotlib==3.9.4", "opencv-python==4.11.0.86", "scipy==1.13.1", "tqdm==4.67.1",
+]
+
+[project.optional-dependencies]
+cuda = ["jax[cuda12]==0.4.38"]
+robomimic = ["robomimic @ git+https://github.com/ARISE-Initiative/robomimic.git@e10526b9a40c78b41f1e37e60041dc0ec0a5f60f", "robosuite==1.5.1"]
+test = ["pytest>=8"]
+
+[tool.uv]
+package = false
+# OCBench needs a newer Hub client than RoboMimic pins. RoboMimic imports
+# Diffusers transitively, so also use a version without Hub's removed
+# cached_download API. Our trainer uses neither Diffusers pipelines nor agents.
+override-dependencies = ["huggingface-hub>=0.34,<1", "diffusers==0.31.0"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.uv.extra-build-dependencies]
+egl-probe = ["cmake<4"]

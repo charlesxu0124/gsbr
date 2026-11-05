@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <!-- Google Analytics: production project site only; local previews are excluded. -->
+  <script>
+    (() => {
+      if (location.protocol !== 'https:' || location.hostname !== 'charlesxu0124.github.io' ||
+          !/^\/gsbr(?:\/|$)/.test(location.pathname)) return;
+
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function () { window.dataLayer.push(arguments); };
+      window.gtag('js', new Date());
+      window.gtag('config', 'G-HCLJX1XNCC');
+
+      const tag = document.createElement('script');
+      tag.async = true;
+      tag.src = 'https://www.googletagmanager.com/gtag/js?id=G-HCLJX1XNCC';
+      document.head.appendChild(tag);
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GSBR: Geometric Support Behavior Regularization for Online RL</title>
+  <meta name="description"
+    content="GSBR gives online reinforcement learning the freedom to select better behaviors and refine beyond a pretrained policy’s support. Research paper, method, and results across 19 robotic tasks.">
+  <meta name="theme-color" content="#9a7424">
+  <meta property="og:title" content="GSBR: Geometric Support Behavior Regularization for Online RL">
+  <meta property="og:description"
+    content="Geometric Support Behavior Regularization for Online RL. 19 tasks. Four benchmarks. 95% average success.">
+  <link rel="icon" href="assets/favicon.svg?v=capital-g" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css?v=paper-placeholder">
+  <script src="app.js?v=laptop-opening" defer></script>
+  <link rel="stylesheet" href="figure-animations.css?v=teaser-paper-font">
+  <link rel="stylesheet" href="scroll-animations.css?v=scroll-reveal">
+  <script src="scroll-animations.js?v=bronze-name" defer></script>
+  <script src="figure-animations.js?v=support-infinity-fix" defer></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="nav-wrap"><a href="#" class="wordmark" aria-label="GSBR home"><span
+          class="header-acronym"><span class="method-name">GSBR</span></span><span class="header-full-title">: Geometric Support Behavior Regularization
+          for Online RL</span></a>
+      <nav aria-label="Main navigation"><a href="#overview">Overview</a><a href="#method">Method</a><a
+          href="#results">Experiments</a><a class="nav-paper" href="https://arxiv.org/abs/2611.05295" target="_blank" rel="noopener">Paper <span aria-hidden="true">↗</span></a></nav>
+    </div>
+  </header>
+  <main id="main">
+    <section id="overview" class="hero container" aria-labelledby="paper-title">
+      <h1 id="paper-title"><span class="title-acronym"><span class="method-name">GSBR</span>:</span> Geometric Support Behavior
+        Regularization for Online RL</h1>
+      <p class="authors"><a href="https://charlesxu0124.github.io/" target="_blank" rel="noopener">Charles Xu</a><sup>1</sup>, <a
+          href="https://jacob-berg.com/" target="_blank" rel="noopener">Jacob Berg</a><sup>1</sup>, <a href="https://kayke.xyz/"
+          target="_blank" rel="noopener">Liyiming Ke</a><sup>2</sup>, <a href="https://people.eecs.berkeley.edu/~svlevine/"
+          target="_blank" rel="noopener">Sergey Levine</a><sup>1,2</sup></p>
+      <p class="affiliations"><span><sup>1</sup> UC Berkeley</span><span><sup>2</sup> Physical Intelligence</span></p>
+      <div class="hero-actions">
+        <a class="button secondary" href="https://arxiv.org/abs/2611.05295" target="_blank" rel="noopener">arXiv <span aria-hidden="true">↗</span></a>
+        <a class="button secondary" href="https://github.com/charlesxu0124/gsbr" target="_blank" rel="noopener">Code <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="opening-copy">
+        <!-- <h2>GSBR is a better behavior regularizer for online RL.</h2> -->
+        <p><strong class="punchline">Online RL needs guidance for efficient exploration without being overly constrained by priors.</strong> In robotics, we can leverage the increasingly capable pretrained policies as prior, but improving on them might require discarding poor action modes and exploring around promising ones. <strong class="punchline">Existing approaches are too restrictive in one of two ways:</strong> behavior-cloning tie the actor to the base-policy distribution, including suboptimal modes; support constraints allow mode selection but exclude better actions outside the support. <strong class="punchline"><span class="method-name">GSBR</span> is a better behavior regularizer that preserves both axes of improvement.</strong> It estimates a support region from base-policy samples and applies no behavior penalty inside it. Outside the region, the penalty grows smoothly with distance, allowing improvement when the value gain justifies the cost.</p>
+      </div>
+
+      <figure class="animated-figure" data-figure="1" aria-label="Figure 1 animation"><img class="animation-fallback"
+          src="assets/comparison.svg?v=golden-bronze"
+          alt="Animated comparison of behavior cloning, an epsilon-support constraint, and GSBR.">
+        <div class="animation-viewport" tabindex="0" role="region"
+          aria-label="Figure 1; scroll horizontally on small screens"><svg class="animation-scene" viewBox="0 0 800 435"
+            role="img"
+            aria-label="Animated comparison of behavior cloning, an epsilon-support constraint, and GSBR."></svg></div>
+        <div class="animation-controls" hidden><button type="button" data-play>Play</button><button type="button"
+            data-replay aria-label="Replay Figure 1">Replay ↻</button>
+          <div class="animation-stages" role="group" aria-label="Figure 1 stages"></div>
+          <div class="animation-progress" aria-hidden="true"><span></span></div>
+        </div>
+      </figure>
+      <div class="metrics results-metrics" aria-label="Results at a glance">
+        <div><strong>+23<span>%</span></strong><p>Normalized throughput</p><small>Relative to the next-best RL method</small></div>
+        <div><strong>19</strong><p>Tasks</p><small>State-based and pixel-based control</small></div>
+        <div><strong>4</strong><p>Benchmarks</p><small>RoboMimic · OGBench · OCBench · LIBERO</small></div>
+      </div>
+    </section>
+    <section id="method" class="method-section" aria-labelledby="method-heading">
+      <div class="container section">
+        <h2 class="section-label" id="method-heading">Method</h2>
+        <p class="method-intro"><span class="method-name">GSBR</span> constructs the support region using only action samples from the base policy, then regularizes the actor by its squared distance to that region.</p>
+        <div class="steps">
+          <article><span class="step-number">01</span>
+            <h3>Sample the prior</h3>
+            <p>Draw a set of reference actions from the frozen base policy. Only sample access is needed.</p>
+          </article>
+          <article><span class="step-number">02</span>
+            <h3>Estimate the support</h3>
+            <p>Construct the support region as all actions within radius <var>r</var> of any sample.
+              <var>r</var> is computed adaptively as a quantile of nearest-neighbor distances between samples.</p>
+          </article>
+          <article><span class="step-number">03</span>
+            <h3>Improve with guidance</h3>
+            <p>Run actor-critic update with zero actor-penalty inside the support and a squared-distance regularization outside.</p>
+          </article>
+        </div>
+        <figure class="animated-figure" data-figure="2" aria-label="Figure 2 animation"><img class="animation-fallback"
+            src="assets/method.svg?v=golden-bronze"
+            alt="Animated construction of geometric support from density contours, reference samples, nearest-neighbor distances, and their quantile.">
+          <div class="animation-viewport" tabindex="0" role="region"
+            aria-label="Figure 2; scroll horizontally on small screens"><svg class="animation-scene"
+              viewBox="0 0 1000 490" role="img"
+              aria-label="Animated construction of geometric support from density contours, reference samples, nearest-neighbor distances, and their quantile."></svg>
+          </div>
+          <figcaption class="animation-copy method-animation-copy" aria-live="polite">
+            <h3 class="animation-title"></h3>
+            <p class="animation-description"></p>
+          </figcaption>
+          <div class="animation-controls" hidden><button type="button" data-play>Play</button><button type="button"
+              data-replay aria-label="Replay Figure 2">Replay ↻</button>
+            <div class="animation-stages" role="group" aria-label="Figure 2 stages"></div>
+            <div class="animation-progress" aria-hidden="true"><span></span></div>
+          </div>
+        </figure>
+        <details class="algorithm-details" id="algorithm">
+          <summary><span>Algorithm 1 · Online RL with <span class="method-name">GSBR</span></span><span class="algorithm-toggle" aria-hidden="true">+</span></summary>
+          <div class="algorithm-content">
+            <img class="algorithm-paper-image" src="assets/algorithm-paper.png?v=updated-algorithm" width="1600" height="812" loading="lazy" alt="Algorithm 1 from the paper: sample reference actions and collect online experience; train the critic on mixed offline and online replay; compute the support radius from the quantile of nearest-neighbor distances; update the actor with geometric support regularization.">
+            <a class="algorithm-paper-link" href="https://arxiv.org/pdf/2611.05295#page=7" target="_blank" rel="noopener">Algorithm 1 in the paper ↗</a>
+
+          </div>
+        </details>
+        <aside class="convergence-note" aria-labelledby="convergence-heading">
+          <h3 id="convergence-heading">Asymptotic convergence to the true support penalty</h3>
+          <p>For any finite <var>N</var>, the <span class="method-name">GSBR</span> penalty upper bounds the squared distance from the true support. Further, as the number of reference samples <var>N</var> grows, the nearest-neighbor quantile radius <var>r</var><sub>ℬ</sub> shrinks to zero, and the <span class="method-name">GSBR</span> penalty converges to the true support penalty in expectation. <a href="https://arxiv.org/pdf/2611.05295#page=6" target="_blank" rel="noopener">Theorem 4.1 ↗</a></p>
+        </aside>
+      </div>
+    </section>
+    <section id="results" class="section container" aria-labelledby="results-heading">
+      <h2 class="section-label" id="results-heading">Experiments</h2>
+      <div class="experiment-row benchmark-row">
+      <div class="benchmarks">
+        <article><video src="assets/tool_hang_1080p.mp4" loop muted playsinline preload="metadata"
+            poster="assets/robomimic.png" width="1920" height="1080"
+            aria-label="RoboMimic robot performing the tool-hang task" disablepictureinpicture
+            disableremoteplayback></video>
+          <div>
+            <h3>RoboMimic</h3><span>4 tasks · State inputs</span>
+          </div>
+        </article>
+        <article><video src="assets/cube_triple_t4_1080p.mp4" loop muted playsinline preload="metadata"
+            poster="assets/ogbench.png" width="1920" height="1080" aria-label="OGBench robotic cube manipulation task"
+            disablepictureinpicture disableremoteplayback></video>
+          <div>
+            <h3>OGBench</h3><span>5 tasks · State inputs</span>
+          </div>
+        </article>
+        <article><video src="assets/ocbench_chamber_t3_1080p.mp4" loop muted playsinline preload="metadata"
+            poster="assets/ocbench.png" width="1920" height="1080" aria-label="OCBench chamber manipulation task"
+            disablepictureinpicture disableremoteplayback></video>
+          <div>
+            <h3>OCBench</h3><span>5 tasks · State inputs</span>
+          </div>
+        </article>
+        <article><video src="assets/libero_task29_1080p.mp4" loop muted playsinline preload="metadata"
+            poster="assets/libero.png" width="1920" height="1080"
+            aria-label="LIBERO robot manipulation in a kitchen environment" disablepictureinpicture
+            disableremoteplayback></video>
+          <div>
+            <h3>LIBERO</h3><span>5 tasks · Pixel inputs</span>
+          </div>
+        </article>
+      </div>
+      </div>
+      <div class="experiment-row throughput-row">
+      <figure class="throughput-block">
+        <div class="results-chart" data-result-chart><img src="assets/throughput.svg?v=bronze-name"
+            alt="Normalized throughput across RoboMimic, OGBench, OCBench, LIBERO, and all 19 tasks." width="1193"
+            height="324" loading="lazy"></div>
+        <figcaption>
+          <!-- <h3>Success, with fewer steps.</h3> -->
+          <p><span class="method-name">GSBR</span> achieves <strong>0.95 normalized throughput</strong> across all tasks, compared with <strong>0.77 for
+              RLT</strong>, the next-best baseline—about a 23% relative improvement.</p>
+          <p class="small">Throughput is success rate divided by mean episode length, normalized by the best
+            method per task, then averaged across tasks. Error bars show SEM across seeds.</p>
+        </figcaption>
+      </figure>
+      </div>
+      <!-- <figure class="throughput-block success-rate-block">
+        <div class="success-rate-chart" tabindex="0" role="region" aria-label="Success rate by benchmark; scroll horizontally on small screens"><img src="assets/success-rate.svg" alt="Success rate by benchmark and across all 19 tasks, with mean and SEM from Table 1. GSBR averages 95%; RLT averages 92%; the base policy averages 33%." width="1320" height="360" loading="lazy"></div>
+        <figcaption>
+          <h3>Success rate</h3>
+          <p>GSBR reaches <strong>95% average success</strong> across 19 tasks, compared with <strong>92% for RLT</strong> and <strong>33% for the base policy</strong>.</p>
+          <p class="small">Table 1 · Mean ± SEM across three seed-wise task averages, rounded to the nearest percentage point as in the paper. Dashed lines mark the base policy; its SEM is not reported. </p>
+        </figcaption>
+      </figure> -->
+      <div class="training-curves" aria-labelledby="training-curves-title">
+        <div class="training-curves-heading">
+          <h3 id="training-curves-title">Throughput during training</h3>
+          <a href="https://arxiv.org/pdf/2611.05295#page=19" target="_blank" rel="noopener">All task curves ↗</a>
+
+        </div>
+        <p class="training-curves-unit">Throughput (successes/hour)</p>
+        <div class="training-curves-grid">
+          <figure class="curve-card">
+            <figcaption><span>RoboMimic</span><h4>Tool-hang</h4></figcaption>
+            <svg class="curve-art" data-training-curve="toolhang" data-plot-bounds="369.90778 97.41662 52.74280 42.33721" xmlns="http://www.w3.org/2000/svg" viewBox="358 97 71 50" role="img" aria-label="RoboMimic Tool-hang: absolute throughput versus online environment steps (millions), reproduced from Appendix Figure 6."><use href="assets/training-curves-animation.svg?v=staged#curve-axes"></use><defs><clipPath id="reveal-toolhang-baselines" clipPathUnits="userSpaceOnUse"><rect data-curve-reveal="baselines" x="369.90778" y="97.41662" width="52.74280" height="42.33721"></rect></clipPath><clipPath id="reveal-toolhang-gsbr" clipPathUnits="userSpaceOnUse"><rect data-curve-reveal="gsbr" x="369.90778" y="97.41662" width="52.74280" height="42.33721"></rect></clipPath></defs><g clip-path="url(#reveal-toolhang-baselines)"><use href="assets/training-curves-animation.svg?v=staged#curve-baselines-toolhang"></use></g><g clip-path="url(#reveal-toolhang-gsbr)"><use href="assets/training-curves-animation.svg?v=staged#curve-gsbr-toolhang"></use></g></svg>
+            <p class="curve-axis-label">Online environment steps (millions)</p>
+          </figure>
+          <figure class="curve-card">
+            <figcaption><span>OGBench</span><h4>Cube Triple T5</h4></figcaption>
+            <svg class="curve-art" data-training-curve="cube-t5" data-plot-bounds="445.32997 169.38988 52.74280 42.33722" xmlns="http://www.w3.org/2000/svg" viewBox="434 169 71 50" role="img" aria-label="OGBench Cube Triple T5: absolute throughput versus online environment steps (millions), reproduced from Appendix Figure 6."><use href="assets/training-curves-animation.svg?v=staged#curve-axes"></use><defs><clipPath id="reveal-cube-t5-baselines" clipPathUnits="userSpaceOnUse"><rect data-curve-reveal="baselines" x="445.32997" y="169.38988" width="52.74280" height="42.33722"></rect></clipPath><clipPath id="reveal-cube-t5-gsbr" clipPathUnits="userSpaceOnUse"><rect data-curve-reveal="gsbr" x="445.32997" y="169.38988" width="52.74280" height="42.33722"></rect></clipPath></defs><g clip-path="url(#reveal-cube-t5-baselines)"><use href="assets/training-curves-animation.svg?v=staged#curve-baselines-cube-t5"></use></g><g clip-path="url(#reveal-cube-t5-gsbr)"><use href="assets/training-curves-animation.svg?v=staged#curve-gsbr-cube-t5"></use></g></svg>
+            <p class="curve-axis-label">Online environment steps (millions)</p>
+          </figure>
+          <figure class="curve-card">
+            <figcaption><span>OCBench</span><h4>Chamber T1</h4></figcaption>
+            <svg class="curve-art" data-training-curve="chamber-t1" data-plot-bounds="294.48557 241.36315 52.74280 42.33722" xmlns="http://www.w3.org/2000/svg" viewBox="281 241 71 50" role="img" aria-label="OCBench Chamber T1: absolute throughput versus online environment steps (millions), reproduced from Appendix Figure 6."><use href="assets/training-curves-animation.svg?v=staged#curve-axes"></use><defs><clipPath id="reveal-chamber-t1-baselines" clipPathUnits="userSpaceOnUse"><rect data-curve-reveal="baselines" x="294.48557" y="241.36315" width="52.74280" height="42.33722"></rect></clipPath><clipPath id="reveal-chamber-t1-gsbr" clipPathUnits="userSpaceOnUse"><rect data-curve-reveal="gsbr" x="294.48557" y="241.36315" width="52.74280" height="42.33722"></rect></clipPath></defs><g clip-path="url(#reveal-chamber-t1-baselines)"><use href="assets/training-curves-animation.svg?v=staged#curve-baselines-chamber-t1"></use></g><g clip-path="url(#reveal-chamber-t1-gsbr)"><use href="assets/training-curves-animation.svg?v=staged#curve-gsbr-chamber-t1"></use></g></svg>
+            <p class="curve-axis-label">Online environment steps (millions)</p>
+          </figure>
+          <figure class="curve-card">
+            <figcaption><span>LIBERO</span><h4>Task 54</h4></figcaption>
+            <svg class="curve-art" data-training-curve="libero-54" data-plot-bounds="294.48557 313.33642 52.74280 42.33721" xmlns="http://www.w3.org/2000/svg" viewBox="282 313 73 50" role="img" aria-label="LIBERO Task 54: absolute throughput versus training episodes, reproduced from Appendix Figure 6."><use href="assets/training-curves-animation.svg?v=staged#curve-axes"></use><defs><clipPath id="reveal-libero-54-baselines" clipPathUnits="userSpaceOnUse"><rect data-curve-reveal="baselines" x="294.48557" y="313.33642" width="52.74280" height="42.33721"></rect></clipPath><clipPath id="reveal-libero-54-gsbr" clipPathUnits="userSpaceOnUse"><rect data-curve-reveal="gsbr" x="294.48557" y="313.33642" width="52.74280" height="42.33721"></rect></clipPath></defs><g clip-path="url(#reveal-libero-54-baselines)"><use href="assets/training-curves-animation.svg?v=staged#curve-baselines-libero-54"></use></g><g clip-path="url(#reveal-libero-54-gsbr)"><use href="assets/training-curves-animation.svg?v=staged#curve-gsbr-libero-54"></use></g></svg>
+            <p class="curve-axis-label">Training episodes</p>
+          </figure>
+        </div>
+        <ul class="curve-legend" aria-label="Training curve methods">
+          <li><svg viewBox="0 0 17 6" aria-hidden="true"><use href="assets/training-curve-legend.svg#curve-key-0"></use></svg><span>TD3+BC</span></li>
+          <li><svg viewBox="0 0 17 6" aria-hidden="true"><use href="assets/training-curve-legend.svg#curve-key-1"></use></svg><span>RLT</span></li>
+          <li><svg viewBox="0 0 17 6" aria-hidden="true"><use href="assets/training-curve-legend.svg#curve-key-2"></use></svg><span>Residual Policy</span></li>
+          <li><svg viewBox="0 0 17 6" aria-hidden="true"><use href="assets/training-curve-legend.svg#curve-key-3"></use></svg><span>BFN</span></li>
+          <li><svg viewBox="0 0 17 6" aria-hidden="true"><use href="assets/training-curve-legend.svg#curve-key-4"></use></svg><span>DSRL</span></li>
+          <li><svg viewBox="0 0 17 6" aria-hidden="true"><use href="assets/training-curve-legend.svg#curve-key-5"></use></svg><span>EXPO</span></li>
+          <li><svg viewBox="0 0 17 6" aria-hidden="true"><use href="assets/training-curve-legend.svg#curve-key-6"></use></svg><span>DiceRL</span></li>
+          <li><svg viewBox="0 0 17 6" aria-hidden="true"><use href="assets/training-curve-legend.svg#curve-key-7"></use></svg><span><span class="method-name">GSBR</span> (Ours)</span></li>
+          <li><svg viewBox="0 0 17 6" aria-hidden="true"><use href="assets/training-curve-legend.svg#curve-key-8"></use></svg><span>Base policy</span></li>
+        </ul>
+        <!-- <p class="training-curves-note">Selected tasks from Appendix Figure 6. The paper’s curves and shaded bands are preserved; GSBR uses the website’s bronze accent. State-based tasks use online environment steps; LIBERO uses training episodes.</p> -->
+      </div>
+      <!-- <p class="results-note"><strong>Reading the results.</strong> GSBR has the highest average success rate and
+        throughput across all 19 tasks. On LIBERO, RLT has the highest success rate (86% versus 85% for GSBR), while
+        GSBR reaches 0.86 normalized throughput.</p> -->
+      <!-- <section class="ablations" id="ablations" aria-labelledby="ablations-title">
+        <div class="training-curves-heading">
+          <h3 id="ablations-title">Ablations</h3>
+
+        </div>
+        <p class="ablation-context">Cube Triple · Normalized throughput · Mean ± SEM across three seeds</p>
+        <div class="ablation-grid">
+          <figure class="ablation-card">
+            <h4>Number of reference actions</h4>
+            <img src="assets/ablation-sample-count.svg" width="550" height="355" loading="lazy" alt="Reference-action count sweep: N=8 reaches 1.00 ± 0.05 normalized throughput, N=16 reaches 0.91 ± 0.02, and N=32 reaches 0.93 ± 0.02.">
+          </figure>
+          <figure class="ablation-card">
+            <h4>Support radius</h4>
+            <img src="assets/ablation-radius.svg" width="550" height="355" loading="lazy" alt="Radius ablation: adaptive radius reaches 1.00 ± 0.05 normalized throughput; r=0 reaches 0.66 ± 0.07.">
+          </figure>
+        </div>
+        <p class="ablation-note">Adaptive-radius reference: the <var>N</var> = 8 result in Table 2.</p>
+      </section> -->
+    </section>
+  </main>
+</body>
+
+</html>

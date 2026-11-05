@@ -1,0 +1,5 @@
+# Install into the separately pinned OpenPI environment.
+fastapi==0.141.1
+uvicorn==0.52.1
+json-numpy==2.1.1
+omegaconf==2.3.1

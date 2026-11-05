@@ -1,0 +1,19 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+.venv/
+.env
+.env.*
+!.env.example
+
+# Training environments and generated artifacts
+.venv*/
+.pytest_cache/
+*.pyc
+exp/
+results/
+wandb/
+.cache/
+*.egg-info/
+submodule/
+.ruff_cache/
